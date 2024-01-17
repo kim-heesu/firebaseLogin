@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<div class="content-wrap member">
+		<div class="inner">
+		  <h2>회원가입</h2>
+		  <form class="form-style01">
+			<div class="form-box">
+				<label class="form-tit" for="joinEmail">이메일</label>
+				<input type="text" id="joinEmail" required placeholder="이메일을 입력하세요" />
+			</div>
+			<div class="form-box">
+			  <label class="form-tit" for="joinPw">비밀번호</label>
+			  <input type="password" id="joinPw" required autocomplete="off" placeholder="비밀번호를 입력하세요" />
+			</div>
+
+			<div class="btn-wrap">
+			  <button type="submit" class="joinButton">회원가입</button>
+			</div>
+		  </form>
+		</div>
+
+		<div class="inner">
+			<h2>로그인</h2>
+			<form class="form-style01">
+			  <div class="form-box">
+				  <label class="form-tit" for="loginEmail">이메일</label>
+				  <input type="text" id="loginEmail" required placeholder="이메일을 입력하세요" />
+			  </div>
+			  <div class="form-box">
+				<label class="form-tit" for="loginPw">비밀번호</label>
+				<input type="password" id="loginPw" required autocomplete="off" placeholder="비밀번호를 입력하세요" />
+			  </div>
+  
+			  <div class="btn-wrap">
+				<button type="submit" class="loginButton">로그인</button>
+			  </div>
+			</form>
+		  </div>
+
+
+		  <button class="logoutButton">로그아웃</button>
+	  </div>
+
+	  <script type="module">
+			// Import the functions you need from the SDKs you need
+			import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+			import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
+			// TODO: Add SDKs for Firebase products that you want to use
+			// https://firebase.google.com/docs/web/setup#available-libraries
+		
+			// Your web app's Firebase configuration
+			// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+			const firebaseConfig = {
+				apiKey: "AIzaSyCBkyhyPrzNKwFFnrRuBxDBB-YBYsbyh-k",
+				authDomain: "todolist-5ed28.firebaseapp.com",
+				projectId: "todolist-5ed28",
+				storageBucket: "todolist-5ed28.appspot.com",
+				messagingSenderId: "520621894232",
+				appId: "1:520621894232:web:1173dd18c51a09c06db82d",
+				measurementId: "G-9HX6HC4WRQ"
+			};
+		
+			// Initialize Firebase
+			const app = initializeApp(firebaseConfig);
+			const analytics = getAnalytics(app);
+
+			import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+			const auth = getAuth();
+
+			document.querySelector('.joinButton').addEventListener('click',(event)=>{
+				event.preventDefault();
+
+				const joinEmail = document.querySelector('#joinEmail').value
+				const joinPw = document.querySelector('#joinPw').value
+
+				createUserWithEmailAndPassword(auth, joinEmail, joinPw)
+					.then((userCredential) => {
+						console.log(userCredential)
+						// Signed in 
+						const user = userCredential.user;
+						// ...
+					})
+					.catch((error) => {
+						console.log(error)
+						const errorCode = error.code;
+						const errorMessage = error.message;
+						// ..
+					});
+			});
+
+			document.querySelector('.loginButton').addEventListener('click',(event)=>{
+				event.preventDefault();
+
+				const loginEmail = document.querySelector('#loginEmail').value
+				const loginPw = document.querySelector('#loginPw').value
+
+				signInWithEmailAndPassword(auth, loginEmail, loginPw)
+					.then((userCredential) => {
+						// Signed in 
+						console.log(userCredential)
+						const user = userCredential.user;
+						// ...
+					})
+					.catch((error) => {
+						console.log('로그인실패')
+						const errorCode = error.code;
+						const errorMessage = error.message;
+					});
+			})
+
+
+			document.querySelector('.logoutButton').addEventListener('click',(event)=>{
+				event.preventDefault();
+
+				const auth = getAuth();
+				signOut(auth).then(() => {
+					// Sign-out successful.f
+					console.log(auth)
+				}).catch((error) => {
+					// An error happened.
+					console.log(error)
+				});
+			})
+
+	  </script>
+
+</body>
+</html>
